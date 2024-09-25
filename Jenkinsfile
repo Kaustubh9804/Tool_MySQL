@@ -13,7 +13,7 @@ pipeline {
         stage('checkout') {
             steps {
                  script{
-                        dir("terraform")
+                        dir("Terraform")
                         {
                             git "https://github.com/Kaustubh9804/Tool_MySQL.git"
                         }
@@ -23,15 +23,15 @@ pipeline {
 
         stage('Plan') {
             steps {
-                sh 'pwd;cd terraform/ ; terraform init'
-                sh 'pwd;cd terraform/ ; terraform validate'
-                sh 'pwd;cd terraform/ ; terraform plan'
+                sh 'pwd;cd Terraform/ ; terraform init'
+                sh 'pwd;cd Terraform/ ; terraform validate'
+                sh 'pwd;cd Terraform/ ; terraform plan'
             }
         }
             
         stage('Apply') {
             steps {
-                sh "pwd;cd terraform/ ; terraform apply -auto-approve"
+                sh "pwd;cd Terraform/ ; terraform apply -auto-approve"
             }
         }
     }
