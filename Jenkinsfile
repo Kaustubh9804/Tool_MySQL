@@ -36,7 +36,7 @@ pipeline {
             }
         }
         
-         stage('Apply') {
+         stage('Destroy') {
             steps {
                 sh 'pwd;cd Terraform/ ; terraform destroy -auto-approve'
             }
