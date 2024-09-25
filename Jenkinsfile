@@ -6,6 +6,7 @@ pipeline {
     environment {
         AWS_ACCESS_KEY_ID     = credentials('AWS_ACCESS_KEY_ID')
         AWS_SECRET_ACCESS_KEY = credentials('AWS_SECRET_ACCESS_KEY')
+        AWS_DEFAULT_REGION = 'ap-south-1'
     }
 
    agent  any
@@ -31,9 +32,16 @@ pipeline {
             
         stage('Apply') {
             steps {
-                sh "pwd;cd Terraform/ ; terraform apply -auto-approve"
+                sh 'pwd;cd Terraform/ ; terraform apply -auto-approve'
             }
         }
+        
+         stage('Apply') {
+            steps {
+                sh 'pwd;cd Terraform/ ; terraform destroy -auto-approve'
+            }
+        }
+        
     }
 
 }
