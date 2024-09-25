@@ -22,8 +22,8 @@ pipeline {
             steps {
                 sh 'pwd;cd Terraform/ ; terraform init'
                 sh 'pwd;cd Terraform/ ; terraform validate'
-                sh 'terraform plan -out tfplan'
-                sh 'terraform show -no-color tfplan > tfplan.txt'
+                sh 'pwd;cd Terraform/ ; terraform plan -out tfplan'
+                sh 'pwd;cd Terraform/ ; terraform show -no-color tfplan > tfplan.txt'
             }
         }
       
@@ -37,9 +37,9 @@ pipeline {
                             parameters: [text(name: 'Plan', description: 'Please review the plan', defaultValue: plan)]
                         }
 
-                        sh 'terraform ${action} -input=false tfplan'
+                        sh 'pwd;cd Terraform ; terraform ${action} -input=false tfplan'
                     } else if (params.action == 'destroy') {
-                        sh 'terraform ${action} --auto-approve'
+                        sh 'pwd;cd Terraform ; terraform ${action} --auto-approve'
                     } else {
                         error "Invalid action selected. Please choose either 'apply' or 'destroy'."
                     }
