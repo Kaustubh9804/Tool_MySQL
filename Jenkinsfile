@@ -10,17 +10,12 @@ pipeline {
     }
 
    agent  any
-    stages {
-        stage('checkout') {
+        stages {
+        stage('Clone Repository') {
             steps {
-                 script{
-                        dir("Terraform")
-                        {
-                            git "https://github.com/Kaustubh9804/Tool_MySQL.git"
-                        }
-                    }
-                }
+                git branch: 'main', url:'https://github.com/Kaustubh9804/Tool_MySQL.git'
             }
+        }
 
         stage('Plan') {
             steps {
