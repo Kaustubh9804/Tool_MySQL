@@ -24,16 +24,23 @@ pipeline {
                 sh 'pwd;cd Terraform/ ; terraform plan'
             }
         }
+
+        stage('Approval') {
+           when {
+               not {
+                   equals expected: true, actual: params.autoApprove
+               }
+           }
             
         stage('Apply') {
             steps {
-                sh 'pwd;cd Terraform/ ; terraform apply --auto-approve'
+                sh 'pwd;cd Terraform/ ; terraform apply -auto-approve'
             }
         }
         
          stage('Destroy') {
             steps {
-                sh 'pwd;cd Terraform/ ; terraform destroy --auto-approve'
+                sh 'pwd;cd Terraform/ ; terraform destroy -auto-approve'
             }
         }
         
