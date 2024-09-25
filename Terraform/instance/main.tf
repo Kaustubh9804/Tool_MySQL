@@ -21,3 +21,15 @@ resource "aws_instance" "Private_instance1" {
     Name = var.Private_instance1_name
   }
 }
+
+resource "aws_instance" "Private_instance2" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+  subnet_id     = var.Private_subnet2_id
+  associate_public_ip_address = "false"
+  security_groups = [var.Private_security_group_id]
+  key_name = var.ssh_key_name
+  tags = {
+    Name = var.Private_instance2_name
+  }
+}
