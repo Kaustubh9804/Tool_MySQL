@@ -13,7 +13,7 @@ pipeline {
         stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url:'https://github.com/Kaustubh9804/Tool_MySQL.git'
+                git url: 'https://github.com/Kaustubh9804/Tool_MySQL.git', branch: 'main'
             }
         }
 
