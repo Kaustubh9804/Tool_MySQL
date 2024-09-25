@@ -28,7 +28,7 @@ pipeline {
       
         stage('Apply/Destroy') {
             steps {
-                sh 'pwd;cd Terraform/ ; terraform ${action} --aito-approve'
+                sh 'pwd;cd Terraform/ ; terraform ${action} --auto-approve'
             }
         }
     }
