@@ -20,6 +20,7 @@ module "security_group" {
   vpc_id = module.vpc.vpc_id
   Public_SG_name =  var.Public_SG_name
   Private_SG_name = var.Private_SG_name
+  vpc_id-01 = module.vpc_peering.vpc_id-01
 }
 
 module "instance" {
@@ -55,6 +56,8 @@ module "public_RT" {
   internet_gateway_id = module.internet_gateway.internet_gateway_id
   Public_subnet_id = module.subnet.Public_subnet_id
   public_route_table_name = var.public_route_table_name
+  default_vpc_cidr = var.default_vpc_cidr
+  vpc_peering_id = module.vpc_peering.vpc_peering_id
 }
 
 module "private_RT" {
@@ -64,6 +67,8 @@ module "private_RT" {
   Private_subnet1_id = module.subnet.Private_subnet1_id
   Private_subnet2_id = module.subnet.Private_subnet2_id
   private_route_table_name = var.private_route_table_name
+  default_vpc_cidr = var.default_vpc_cidr
+  vpc_peering_id = module.vpc_peering.vpc_peering_id
 }
 
 module "nacl" {
@@ -72,4 +77,13 @@ module "nacl" {
   Public_subnet_id = module.subnet.Public_subnet_id
   Private_subnet1_id = module.subnet.Private_subnet1_id
   Private_subnet2_id = module.subnet.Private_subnet2_id
+}
+
+module "vpc_peering" {
+  source          = "./vpc_peering"
+  vpc_id          = module.vpc.vpc_id
+  region_name =  var.region_name
+  vpc_peering_name =  var.vpc_peering_name
+  cidr_block = var.cidr_block
+  default_vpc_cidr = var.default_vpc_cidr
 }
