@@ -1,0 +1,55 @@
+---
+- name: Install MySQL
+  apt:
+    name: mysql-server
+    state: present
+
+- name: Start and enable MySQL
+  service:
+    name: mysql
+    enabled: true
+
+- name: Install dependencies
+  apt:
+    name: python3-mysqldb
+    state: present
+
+- name: Configure MySQL mysqld.cnf for Master
+  template:
+    src: master_mysqld.cnf.j2
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+  become: true
+  notify: restart mysql
+
+- name: Set the root password for MySQL (first-time setup)
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host: "%"
+    state: present
+    login_user: root
+    column_case_sensitive: true
+
+- name: Create database Demo
+  mysql_db:
+    name: "{{ mysql_db_name }}"
+    state: present
+
+- name: Create replication user
+  mysql_user:
+    name: "{{ mysql_replication_user }}"
+    password: "{{ mysql_replication_password }}"
+    priv: "*.*:REPLICATION SLAVE"
+    host: "{{ hostvars[groups['tag_Name_MySQL_replica'][0]].private_ip_address }}"
+    state: present
+    column_case_sensitive: true
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+    login_host: localhost
+
+- name: Flush privileges for MySQL replication user
+  mysql_query:
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+    login_host: localhost
+    query: "FLUSH PRIVILEGES;"
