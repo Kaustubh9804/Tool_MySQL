@@ -1,0 +1,12 @@
+---
+# vars file for MySQL
+mysql_root_user: root
+mysql_root_password: root 
+mysql_replication_user: replica
+mysql_replication_password: Kaustubh
+master_server_id: 1
+slave_server_id: 2
+mysql_db_name: "Batch_27"
+master_instance_private_ip: "{{ hostvars[groups['tag_Name_MySQL'][0]].ansible_default_ipv4.address }}"
+slave_instance_private_ip: "{{ hostvars[groups['tag_Name_MySQL_replica'][0]].ansible_default_ipv4.address }}"
+haproxy_instance: "haproxy"
