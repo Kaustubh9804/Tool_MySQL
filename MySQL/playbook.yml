@@ -1,0 +1,24 @@
+---
+- name: Master
+  hosts: tag_Name_MySQL
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - MySQL
+
+- name: Slave
+  hosts: tag_Name_MySQL_replica
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - MySQL
+
+- name: HAproxy
+  hosts: tag_Name_Public_EC2
+  become: true
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  roles:
+    - MySQL
