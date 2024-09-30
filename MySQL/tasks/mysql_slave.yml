@@ -1,0 +1,115 @@
+---
+- name: Install MySQL on the slave instance
+  apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+
+- name: Install dependencies
+  apt:
+    name: python3-mysqldb
+    state: present
+
+- name: Configure MySQL my.cnf for Slave
+  template:
+    src: slave_mysqld.cnf.j2
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+  notify: restart mysql
+
+- name: Start and enable MySQL service
+  service:
+    name: mysql
+    state: started
+    enabled: true
+
+- name: Set the root password for MySQL (first-time setup)
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host: "{{ hostvars[groups['tag_Name_MySQL_replica'][0]].private_ip_address }}"
+    state: present
+    login_user: root
+    column_case_sensitive: true
+
+- name: Grant all privileges to root
+  mysql_user:
+    name: root
+    password: "{{ mysql_root_password }}"
+    host: "{{ hostvars[groups['tag_Name_MySQL_replica'][0]].private_ip_address }}"
+    priv: '*.*:ALL PRIVILEGES'
+    state: present
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    check_implicit_admin: yes
+    column_case_sensitive: true
+
+- name: Flush privileges
+  mysql_info:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  register: mysql_info_result
+
+- name: Execute flush privileges
+  mysql_query:
+    query: "FLUSH PRIVILEGES;"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+
+- name: Stop MySQL slave
+  mysql_query:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    query: "STOP SLAVE;"
+  become: true
+
+- name: Reset the slave
+  mysql_query:
+    query: "RESET SLAVE ALL;"
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+  become: true
+
+- name: Get master status
+  mysql_query:
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+    query: "SHOW MASTER STATUS"
+  delegate_to: "{{ groups['tag_Name_MySQL'][0] }}"
+  register: master_status
+
+- name: Debug master_status
+  debug:
+    var: master_status
+
+- name: Set master log file and log position facts
+  set_fact:
+    mysql_master_log_file: "{{ master_status.query_result[0][0].File }}"
+    mysql_master_log_pos: "{{ master_status.query_result[0][0].Position }}"
+
+- name: Start replication on slave
+  become: true
+  mysql_replication:
+    mode: changeprimary
+    master_host: "{{ hostvars[groups['tag_Name_MySQL'][0]].ansible_default_ipv4.address }}"
+    master_user: "{{ mysql_replication_user }}"
+    master_password: "{{ mysql_replication_password }}"
+    master_log_file: "{{ hostvars[groups['tag_Name_MySQL_replica'][0]]['mysql_master_log_file'] }}"
+    master_log_pos: "{{ hostvars[groups['tag_Name_MySQL_replica'][0]]['mysql_master_log_pos'] }}"
+
+- name: Start MySQL replication
+  mysql_query:
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    query: "START SLAVE;"
+  become: true
+
+- name: Show MySQL slave status
+  mysql_query:
+    login_user: "{{ mysql_root_user }}"
+    login_password: "{{ mysql_root_password }}"
+    query: "SHOW SLAVE STATUS"
+  register: slave_status
+
+- name: Display MySQL slave status
+  debug:
+    var: slave_status
