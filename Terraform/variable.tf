@@ -127,3 +127,18 @@ variable "ssh_key_name" {
   type = string
   default = "Kaustubh"
 }
+
+variable "region_name" {
+  type = string
+  default = "ap-south-1"
+}
+
+variable "vpc_peering_name" {
+  type = string
+  default = "VPC_Peering"
+}
+
+variable "default_vpc_cidr" {
+  type = string
+  default = "172.31.0.0/16"
+}
