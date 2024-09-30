@@ -29,3 +29,7 @@ variable "Private_ingress_cidr_block" {
 variable "Private_SG_name" {
   type    = string
 }
+
+variable "vpc_id-01" {
+  type = string
+}
