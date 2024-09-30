@@ -17,3 +17,11 @@ variable "Private_subnet2_id" {
 variable "private_route_table_name" {
   type = string
 }
+
+variable "default_vpc_cidr" {
+  type = string
+}
+
+variable "vpc_peering_id" {
+  type = string
+}
