@@ -54,6 +54,6 @@ ingress {
     cidr_blocks = ["0.0.0.0/0"]
   }
   tags = {
-    Name = var.Public_SG_name
+    Name = var.Private_SG_name
   }
 }
