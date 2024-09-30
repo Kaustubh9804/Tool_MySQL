@@ -13,3 +13,11 @@ variable "Public_subnet_id" {
 variable "public_route_table_name" {
   type = string
 }
+
+variable "default_vpc_cidr" {
+  type = string
+}
+
+variable "vpc_peering_id" {
+  type = string
+}
