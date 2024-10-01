@@ -18,10 +18,20 @@ pipeline {
             }
         }
 
-        stage('Plan') {
+        stage('Initializing the terraform ') {
             steps {
-                sh 'pwd;cd Terraform/ ; terraform init'
+                sh 'pwd;cd Terraform/ ; terraform init'  
+            }
+        }
+
+        stage('Validating the terraform code') {
+            steps {
                 sh 'pwd;cd Terraform/ ; terraform validate'
+            }
+        }
+
+        stage('Planning the infrastructure') {
+            steps {
                 sh 'pwd;cd Terraform/ ; terraform plan'
             }
         }
