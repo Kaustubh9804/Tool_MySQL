@@ -1,0 +1,16 @@
+pipeline {
+  agent  any
+        stages {
+        stage('Clone Repository') {
+            steps {
+                git url: 'https://github.com/Kaustubh9804/Tool_MySQL.git', branch: 'main'
+            }
+        }
+          
+        stage('Run the Ansible Playbook') {
+          steps {
+            sh 'pwd,cd MySQL ; ansible-playbook -i ./tests/aws_ec2.yml playbook.yml'
+          }
+        }
+      }
+}
