@@ -15,7 +15,7 @@ pipeline {
           
         stage('Run the Ansible Playbook') {
           steps {
-            sh 'pwd ; cd MySQL ; ansible-playbook -i ./tests/aws_ec2.yml ./playbook.yml'
+            sh 'pwd ; cd MySQL ; ansible-playbook -i ./tests/aws_ec2.yml playbook.yml'
           }
         }
       }
