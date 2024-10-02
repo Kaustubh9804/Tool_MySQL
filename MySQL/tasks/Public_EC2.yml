@@ -1,4 +1,9 @@
 ---
+-name: Copy the Private key
+ copy:
+   src: /home/ubuntu/Kaustubh.pem
+   dest: /home/ubuntu/Kaustubh.pem
+   
 - name: Install HAProxy
   apt:
     name: haproxy
