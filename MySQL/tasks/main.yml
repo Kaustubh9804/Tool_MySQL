@@ -9,5 +9,5 @@
   when: "inventory_hostname in groups['tag_Name_MySQL_replica']"
 
 - name: Install HAProxy on the public instance
-  include_tasks: haproxy.yml
+  include_tasks: Public_EC2.yml
   when: "inventory_hostname in groups['tag_Name_Public_EC2']"
