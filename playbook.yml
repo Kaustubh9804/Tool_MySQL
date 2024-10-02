@@ -15,7 +15,7 @@
   roles:
     - MySQL
 
-- name: HAproxy
+- name: Public_EC2
   hosts: tag_Name_Public_EC2
   become: true
   vars:
