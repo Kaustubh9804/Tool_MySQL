@@ -29,12 +29,7 @@
     state: present
     login_user: root
     column_case_sensitive: true
-
-- name: Create database Demo
-  mysql_db:
-    name: "{{ mysql_db_name }}"
-    state: present
-
+    
 - name: Create replication user
   mysql_user:
     name: "{{ mysql_replication_user }}"
