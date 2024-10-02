@@ -6,3 +6,7 @@ keyed_groups:
     prefix: tag_Name
 filters:
   instance-state-name: running
+hostnames:
+  - private-ip-address    
+compose:
+  ansible_host: private_ip_address
