@@ -1,7 +1,7 @@
 ---
 -name: Copy the Private key
  copy:
-   src: /home/ubuntu/Kaustubh.pem
+   src: /var/lib/jenkins/Kaustubh.pem
    dest: /home/ubuntu/Kaustubh.pem
    
 - name: Install HAProxy
